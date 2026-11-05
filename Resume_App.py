@@ -1,7 +1,8 @@
+
 """
 Program: Resume_App.py
-Author: Pedro Ledezma"""
-
+Author: Pedro Ledezma
+"""
 
 import tkinter as tk
 from tkinter import messagebox
@@ -23,6 +24,9 @@ class ResumeApp:
             "Education": self.education_text(),
             "Skills": self.skills_text(),
             "FightLine": self.fightline_text(),
+            "Phishing Detector": self.phishing_text(),
+            "Interactive Resume": self.resume_text(),
+            "Data Structures": self.data_structures_text(),
             "Anton / Bapa": self.anton_text(),
             "Data Manager": self.data_manager_text(),
             "Leadership": self.leadership_text(),
@@ -49,7 +53,7 @@ class ResumeApp:
 
         title_label = tk.Label(
             header,
-            text="Computer Science Student | Python Developer",
+            text="Software Development | IT Support | Linux | Cybersecurity",
             font=("Arial", 13),
             bg="#172033",
             fg="#cbd5e1",
@@ -58,9 +62,7 @@ class ResumeApp:
 
         contact_label = tk.Label(
             header,
-            text=(
-                "San Diego, CA   •   garciarexx33@gmail.com"
-            ),
+            text="San Diego, CA   •   garciarexx33@gmail.com",
             font=("Arial", 10),
             bg="#172033",
             fg="#94a3b8",
@@ -114,52 +116,76 @@ class ResumeApp:
             )
             radio.pack(fill="x", padx=12)
 
-        separator = tk.Frame(navigation, bg="#e2e8f0", height=1)
+        separator = tk.Frame(
+            navigation,
+            bg="#e2e8f0",
+            height=1,
+        )
         separator.pack(fill="x", padx=20, pady=18)
 
-        github_button = tk.Button(
+        # Use clickable Labels instead of native Tk buttons
+        # to keep text and background colors consistent on macOS.
+        self.make_action_button(
             navigation,
-            text="Open GitHub",
-            command=self.open_github,
-            font=("Arial", 10, "bold"),
-            bg="#2563eb",
-            fg="white",
-            activebackground="#1d4ed8",
-            activeforeground="white",
-            cursor="hand2",
-            relief="flat",
-            pady=10,
+            "Open GitHub",
+            self.open_github,
+            "#2563eb",
+            "#ffffff",
         )
-        github_button.pack(fill="x", padx=20)
 
-        email_button = tk.Button(
+        self.make_action_button(
             navigation,
-            text="Send Email",
-            command=self.send_email,
-            font=("Arial", 10, "bold"),
-            bg="#475569",
-            fg="white",
-            activebackground="#334155",
-            activeforeground="white",
-            cursor="hand2",
-            relief="flat",
-            pady=10,
+            "Send Email",
+            self.send_email,
+            "#475569",
+            "#ffffff",
         )
-        email_button.pack(fill="x", padx=20, pady=(10, 0))
 
-        copy_button = tk.Button(
+        self.make_action_button(
             navigation,
-            text="Copy Current Section",
-            command=self.copy_section,
-            font=("Arial", 10),
-            bg="#e2e8f0",
-            fg="#1e293b",
-            activebackground="#cbd5e1",
-            cursor="hand2",
-            relief="flat",
-            pady=10,
+            "Copy Current Section",
+            self.copy_section,
+            "#e2e8f0",
+            "#172033",
         )
-        copy_button.pack(fill="x", padx=20, pady=(10, 0))
+
+    def make_action_button(
+        self, parent, text, command, bg, fg
+    ):
+        button = tk.Label(
+            parent,
+            text=text,
+            font=("Arial", 10, "bold"),
+            bg=bg,
+            fg=fg,
+            cursor="hand2",
+            pady=12,
+            relief="flat",
+        )
+        button.pack(fill="x", padx=20, pady=(0, 10))
+
+        button.bind("<Button-1>", lambda event: command())
+
+        # Keyboard accessibility
+        button.configure(takefocus=1)
+        button.bind("<Return>", lambda event: command())
+        button.bind("<space>", lambda event: command())
+
+        original_bg = bg
+
+        def on_enter(event):
+            if bg == "#2563eb":
+                button.config(bg="#1d4ed8")
+            elif bg == "#475569":
+                button.config(bg="#334155")
+            else:
+                button.config(bg="#cbd5e1")
+
+        def on_leave(event):
+            button.config(bg=original_bg)
+
+        button.bind("<Enter>", on_enter)
+        button.bind("<Leave>", on_leave)
 
     def create_content_area(self, parent):
         content_card = tk.Frame(
@@ -168,7 +194,11 @@ class ResumeApp:
             highlightthickness=1,
             highlightbackground="#d7dce2",
         )
-        content_card.pack(side="right", fill="both", expand=True)
+        content_card.pack(
+            side="right",
+            fill="both",
+            expand=True,
+        )
 
         self.section_title = tk.Label(
             content_card,
@@ -178,13 +208,33 @@ class ResumeApp:
             fg="#172033",
             anchor="w",
         )
-        self.section_title.pack(fill="x", padx=35, pady=(30, 10))
+        self.section_title.pack(
+            fill="x",
+            padx=35,
+            pady=(30, 10),
+        )
 
-        title_line = tk.Frame(content_card, bg="#2563eb", height=3)
-        title_line.pack(fill="x", padx=35, pady=(0, 20))
+        title_line = tk.Frame(
+            content_card,
+            bg="#2563eb",
+            height=3,
+        )
+        title_line.pack(
+            fill="x",
+            padx=35,
+            pady=(0, 20),
+        )
 
-        text_container = tk.Frame(content_card, bg="#ffffff")
-        text_container.pack(fill="both", expand=True, padx=30, pady=(0, 25))
+        text_container = tk.Frame(
+            content_card,
+            bg="#ffffff",
+        )
+        text_container.pack(
+            fill="both",
+            expand=True,
+            padx=30,
+            pady=(0, 25),
+        )
 
         scrollbar = tk.Scrollbar(text_container)
         scrollbar.pack(side="right", fill="y")
@@ -202,9 +252,15 @@ class ResumeApp:
             spacing3=7,
             yscrollcommand=scrollbar.set,
         )
-        self.content_text.pack(side="left", fill="both", expand=True)
+        self.content_text.pack(
+            side="left",
+            fill="both",
+            expand=True,
+        )
 
-        scrollbar.config(command=self.content_text.yview)
+        scrollbar.config(
+            command=self.content_text.yview
+        )
 
         self.content_text.tag_configure(
             "section_heading",
@@ -291,172 +347,246 @@ class ResumeApp:
 
     @staticmethod
     def open_github():
-        webbrowser.open("https://github.com/garciarexx33-bit")
+        webbrowser.open(
+            "https://github.com/garciarexx33-bit"
+        )
 
     @staticmethod
     def send_email():
-        webbrowser.open("mailto:garciarexx33@gmail.com")
+        webbrowser.open(
+            "mailto:garciarexx33@gmail.com"
+        )
 
     @staticmethod
     def about_me_text():
         return (
-            "Hi, I'm Pedro. I'm currently studying Computer Science at "
-            "San Diego Mesa College, where I've been building projects that "
-            "help me grow as a programmer and problem-solver.\n\n"
-            "I enjoy creating useful Python applications, working with APIs, "
-            "building desktop interfaces with Tkinter, and figuring out why "
-            "something is not working when a bug appears.\n\n"
-            "Most of my experience has come from hands-on projects. I've built "
-            "an MMA odds tracker, a personal terminal assistant, and a desktop "
-            "data-management program. Every project has helped me become more "
-            "comfortable writing cleaner code, organizing larger programs, "
-            "and creating software that is easier for people to use.\n\n"
-            "I'm looking for an entry-level opportunity where I can keep "
-            "learning, contribute to a team, and prove that I can be a "
-            "reliable asset."
+            "## Professional Profile\n"
+            "Computer Science student at San Diego Mesa College "
+            "with hands-on experience in software development, "
+            "operating systems, and technical troubleshooting. "
+            "My work spans Python, C++, Java, Linux, and desktop "
+            "application development.\n\n"
+
+            "## Technical Focus\n"
+            "I build interactive applications, integrate external "
+            "APIs, implement data structures and algorithms, and "
+            "work with Linux command-line tools. I use Git and "
+            "GitHub to manage source code and track development "
+            "changes.\n\n"
+
+            "My projects include a live MMA odds tracker, a Python "
+            "phishing detection tool, and an interactive resume "
+            "application. I also have practical experience "
+            "configuring operating systems and diagnosing hardware "
+            "and software issues.\n\n"
+
+            "## Career Interests\n"
+            "I am pursuing opportunities in IT support, help desk, "
+            "software development, and cybersecurity. I value "
+            "clear communication, methodical troubleshooting, "
+            "and reliable solutions."
         )
 
     @staticmethod
     def education_text():
         return (
             "## San Diego Mesa College\n"
-            "San Diego, California\n\n"
-            "Associate Degree in Computer Science\n"
-            "Expected Graduation: 2027\n\n"
+            "San Diego, California\n"
+            "Associate Degree in Computer Science — In Progress\n\n"
+
             "## Relevant Coursework\n"
-            "• Introduction to Computer Science\n"
+            "• Data Structures and Algorithms (C++)\n"
+            "• Object-Oriented Programming (C++ and Java)\n"
             "• Python Programming\n"
-            "• C++ Programming\n"
-            "• Trigonometry\n"
-            "• Calculus\n"
-            "• Linear Algebra\n\n"
-            "My coursework has helped me build a foundation in programming, "
-            "problem-solving, mathematics, and software development."
+            "• Discrete Mathematics\n"
+            "• Linux and Computer Systems\n"
+            "• SQL and Database Fundamentals\n"
+            "• Trigonometry\n\n"
+
+            "## Applied Learning\n"
+            "• Implemented classes, inheritance, pointers, "
+            "trees, and sorting algorithms\n"
+            "• Built and tested C++ programs in a Linux environment\n"
+            "• Used Git, CMake, and automated tests for "
+            "coursework projects"
         )
 
     @staticmethod
     def skills_text():
         return (
-            "## Programming Languages\n"
-            "• Python\n"
-            "• C++\n\n"
-            "## Desktop Interface Development\n"
-            "• Tkinter\n"
-            "• Radio buttons\n"
-            "• Command buttons\n"
-            "• Entry fields\n"
-            "• Labels and frames\n"
-            "• Scrollbars\n"
-            "• Message boxes\n"
-            "• Event-driven programming\n\n"
-            "## Tools and Technologies\n"
-            "• Git\n"
-            "• GitHub\n"
-            "• Visual Studio Code\n"
-            "• REST APIs\n"
-            "• JSON data\n"
-            "• Command-line tools\n"
-            "• File input and output\n\n"
-            "## Strengths\n"
-            "• Debugging and troubleshooting\n"
-            "• Breaking large problems into smaller steps\n"
-            "• Organizing code into separate files and modules\n"
-            "• Learning new tools through hands-on practice\n"
-            "• Staying patient when solving technical problems\n\n"
-            "## Certification in Progress\n"
-            "• Microsoft SC-900: Security, Compliance, and Identity Fundamentals"
+            "## IT Support and Systems\n"
+            "• Hardware and software troubleshooting\n"
+            "• Linux command-line operations and system configuration\n"
+            "• Operating system installation and setup\n"
+            "• Shell scripting and file management\n"
+            "• Technical problem diagnosis\n\n"
+
+            "## Programming and Development\n"
+            "• Python, C++, Java\n"
+            "• SQL fundamentals\n"
+            "• Data structures and algorithms\n"
+            "• Object-oriented programming\n"
+            "• Tkinter desktop GUI development\n"
+            "• REST API integration and JSON\n"
+            "• File I/O, error handling, and input validation\n\n"
+
+            "## Development Tools\n"
+            "• Git and GitHub\n"
+            "• Visual Studio Code and IDLE\n"
+            "• CMake and automated testing\n"
+            "• Linux terminal and command-line utilities\n\n"
+
+            "## Cybersecurity\n"
+            "• Phishing indicator analysis\n"
+            "• Rule-based email risk scoring\n"
+            "• Security fundamentals and threat awareness"
         )
 
     @staticmethod
     def fightline_text():
         return (
-            "## FightLine\n"
-            "Python Developer | 2026–Present\n\n"
-            "FightLine started as a way for me to combine two things I enjoy: "
-            "programming and MMA.\n\n"
-            "I built a Python desktop application that pulls live betting "
-            "odds from multiple sportsbooks and displays the information in "
-            "an organized Tkinter interface.\n\n"
-            "## What I Built\n"
-            "• Connected the application to The Odds API\n"
-            "• Retrieved and processed live sportsbook data\n"
-            "• Displayed betting odds inside a Tkinter interface\n"
-            "• Added automatic refreshing for updated odds\n"
-            "• Tracked betting-line movement over time\n"
-            "• Used dropdown menus and buttons to improve navigation\n"
-            "• Organized the interface, API calls, and data into separate files\n"
-            "• Used Git and GitHub to manage project updates\n\n"
-            "This project taught me how to work with external data, organize "
-            "a larger Python application, and troubleshoot problems involving "
-            "API requests and user interfaces."
+            "## FightLine — UFC Odds Tracker\n"
+            "Python | Tkinter | The Odds API\n\n"
+
+            "Developed a desktop application that retrieves "
+            "and displays MMA betting odds from multiple sportsbooks.\n\n"
+
+            "## Features\n"
+            "• Integrated The Odds API for sportsbook data\n"
+            "• Implemented automatic odds refresh\n"
+            "• Tracked betting-line movement\n"
+            "• Organized data in an interactive Tkinter interface\n"
+            "• Used Git and GitHub for version control\n\n"
+
+            "## Repository\n"
+            "https://github.com/garciarexx33-bit/fight-line"
+        )
+
+    @staticmethod
+    def phishing_text():
+        return (
+            "## Phishing Detector\n"
+            "Python | Cybersecurity | Rule-Based Analysis\n\n"
+
+            "Developed a Python tool that evaluates email content "
+            "for potential phishing indicators and generates an "
+            "explainable risk assessment.\n\n"
+
+            "## Features\n"
+            "• Checks for suspicious keywords and urgency tactics\n"
+            "• Examines URLs and potentially risky domain patterns\n"
+            "• Flags credential requests and unusual payment instructions\n"
+            "• Uses weighted indicators to classify risk levels\n"
+            "• Provides warnings explaining detected concerns\n\n"
+
+            "## Repository\n"
+            "https://github.com/garciarexx33-bit/phishing-detector"
+        )
+
+    @staticmethod
+    def resume_text():
+        return (
+            "## Interactive Resume Application\n"
+            "Python | Tkinter | Desktop GUI\n\n"
+
+            "Developed this interactive desktop resume to present "
+            "my technical background, education, and projects "
+            "through a navigable graphical interface.\n\n"
+
+            "## Features\n"
+            "• Section-based navigation with radio buttons\n"
+            "• Scrollable, formatted resume content\n"
+            "• GitHub and email actions\n"
+            "• One-click copying of resume sections\n"
+            "• Responsive window sizing and organized layout\n\n"
+
+            "## Repository\n"
+            "https://github.com/garciarexx33-bit/interactive-resume-app"
+        )
+
+    @staticmethod
+    def data_structures_text():
+        return (
+            "## C++ Data Structures and Algorithms\n"
+            "C++ | Linux | Git | CMake\n\n"
+
+            "Completed hands-on implementations and tests "
+            "covering core data structures, object-oriented "
+            "design, and algorithm behavior.\n\n"
+
+            "## Topics and Implementations\n"
+            "• Trees and preorder, inorder, postorder, "
+            "and level-order traversals\n"
+            "• Sorting algorithm analysis and comparison\n"
+            "• Lists, classes, constructors, and operator overloading\n"
+            "• Inheritance, polymorphism, and pointer-based objects\n"
+            "• Automated builds and tests using CMake and CTest\n"
+            "• Memory-checking workflows with Valgrind\n\n"
+
+            "Coursework repository available upon request "
+            "if access is restricted."
         )
 
     @staticmethod
     def anton_text():
         return (
-            "## Anton / Bapa Assistant\n"
-            "Python Developer | 2026–Present\n\n"
-            "This project began as a simple way to practice Python outside of "
-            "school. Over time, it became a personal terminal assistant with "
-            "commands for working with files, folders, programs, and basic "
-            "computer information.\n\n"
-            "## Features\n"
-            "• Opens applications such as Finder, Notes, and Terminal\n"
-            "• Lists files inside folders\n"
-            "• Reads text files\n"
-            "• Opens files and folders\n"
-            "• Launches Python programs\n"
-            "• Displays battery information\n"
-            "• Checks disk space and Wi-Fi status\n"
-            "• Handles invalid commands without immediately crashing\n\n"
-            "Building Anton helped me become more comfortable with command "
-            "processing, file operations, error handling, and working with "
-            "the macOS operating system through Python."
+            "## Anton — Python Assistant\n"
+            "Python | macOS | Command-Line Utilities\n\n"
+
+            "Developed a command-driven assistant for working "
+            "with files, folders, applications, and basic "
+            "system information.\n\n"
+
+            "## Technical Work\n"
+            "• Processed user commands and handled invalid input\n"
+            "• Implemented file and directory operations\n"
+            "• Launched applications and Python programs\n"
+            "• Retrieved basic system status information\n\n"
+
+            "## Repository\n"
+            "https://github.com/garciarexx33-bit/anton-python-assistant\n\n"
+
+            "## Bapa — Python Assistant\n"
+            "Created a separate experimental text-command "
+            "assistant project.\n"
+            "https://github.com/garciarexx33-bit/bapa-py"
         )
 
     @staticmethod
     def data_manager_text():
         return (
             "## Personal Data Management System\n"
-            "Python and Tkinter Project\n\n"
-            "I built this project to turn a basic command-line data program "
-            "into a desktop application that is easier to understand and use.\n\n"
-            "The application allows a user to create and manage profile "
-            "information through a Tkinter interface instead of typing every "
-            "command into the terminal.\n\n"
+            "Python | Tkinter\n\n"
+
+            "Built a desktop interface for creating and "
+            "maintaining saved profile records.\n\n"
+
             "## Features\n"
-            "• Add new profiles\n"
-            "• View saved profiles\n"
-            "• Search for a profile by ID\n"
-            "• Update existing information\n"
-            "• Delete profiles\n"
-            "• Save information between sessions\n"
-            "• Use radio buttons to select different actions or options\n"
-            "• Enter information through text fields\n"
-            "• Display success and error messages\n"
-            "• Validate input before saving it\n\n"
-            "This project helped me understand how the same programming logic "
-            "can be used in both command-line and graphical applications."
+            "• Add, view, search, update, and delete profiles\n"
+            "• Save data between sessions\n"
+            "• Validate user input\n"
+            "• Display confirmation and error messages\n"
+            "• Navigate through graphical controls\n\n"
+
+            "This project applies CRUD operations, file "
+            "persistence, and event-driven interface design."
         )
 
     @staticmethod
     def leadership_text():
         return (
             "## Brazilian Jiu-Jitsu\n"
-            "Purple Belt Practitioner | San Diego, California\n\n"
-            "I've trained in Brazilian Jiu-Jitsu for several years. Reaching "
-            "purple belt required consistency, patience, and the willingness "
-            "to keep learning even when progress felt slow.\n\n"
-            "Training has taught me how to stay calm while solving problems, "
-            "accept feedback, work with different personalities, and adjust "
-            "when something is not working.\n\n"
-            "## Skills Developed Through Training\n"
-            "• Discipline and long-term commitment\n"
-            "• Teamwork and communication\n"
-            "• Problem-solving under pressure\n"
-            "• Adaptability\n"
-            "• Patience during difficult situations\n"
-            "• Comfort with learning through failure and repetition"
+            "Purple Belt | San Diego, California\n\n"
+
+            "Years of training in Brazilian Jiu-Jitsu have "
+            "strengthened my discipline, adaptability, teamwork, "
+            "and ability to remain composed under pressure.\n\n"
+
+            "## Transferable Strengths\n"
+            "• Consistent practice and long-term commitment\n"
+            "• Clear communication and constructive feedback\n"
+            "• Analytical problem-solving under pressure\n"
+            "• Adaptability and teamwork"
         )
 
 
